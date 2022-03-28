@@ -4,8 +4,10 @@
 */
 package eksamenhtxbankz;
 
+import javax.swing.JFrame;
 
-public class MainWindow {
+
+public class MainWindow extends JFrame{
 
     
 }
