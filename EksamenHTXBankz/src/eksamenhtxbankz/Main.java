@@ -14,8 +14,10 @@ public class Main {
 
 
     public static void main(String[] args) {
+        //Start of GUI, creates an instance from MainWindow class which inherits from JFrame
         JFrame gui = new MainWindow();
         
+        //Gets the screen size, soloution from: https://www.codegrepper.com/code-examples/java/how+to+get+screen+width+and+hiehgt+java
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
         int screenWidth = screenSize.width;
