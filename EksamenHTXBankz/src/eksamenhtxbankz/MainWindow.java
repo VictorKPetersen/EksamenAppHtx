@@ -26,21 +26,25 @@ public class MainWindow extends JFrame{
     private JButton homeOpsparBtn;
     
     public MainWindow() {
-        CreateComponents();
+        CreateComponentsHome();
+        CreateComponentsKonto();
+        CreateComponentsUdgift();
+        CreateComponentsIndkomst();
+        CreateComponentsOpspar();
+        
     }
     
-    private void CreateComponents(){
+    private void CreateComponentsHome(){
         homePanel = new JPanel();
-        kontoPanel = new JPanel();
-        udgiftPanel = new JPanel();
-        indkomstPanel = new JPanel();
-        opsparPanel = new JPanel();
+        
         
         
         homeKontoBtn = new JButton("Konto");
         homeUdgiftBtn = new JButton("Udgifter");
         homeIndkomstBtn = new JButton("Indkomst");
         homeOpsparBtn = new JButton("Hjælp til opspar");
+        
+       
         
         homeKontoBtn.addActionListener(new ActionListener() {
             @Override
@@ -75,17 +79,40 @@ public class MainWindow extends JFrame{
         homePanel.add(homeIndkomstBtn);
         homePanel.add(homeOpsparBtn);
         
-        kontoPanel.add(homeUdgiftBtn);
+        
         
         add(homePanel);
         
         
     }
     
+    private void CreateComponentsKonto(){
+        kontoPanel = new JPanel();
+        
+    }
+    
+    private void CreateComponentsUdgift(){
+        udgiftPanel = new JPanel();
+        
+    }
+    
+    private void CreateComponentsIndkomst(){
+        indkomstPanel = new JPanel();
+        
+    }
+    
+    private void CreateComponentsOpspar(){
+        opsparPanel = new JPanel();
+        
+    }
+    
     public void switchPanels(JPanel currentPanel, JPanel newPanel){
-        add(newPanel);
+        
         remove(currentPanel);
-        //add(newPanel);
+        add(newPanel);
+        revalidate();
+        repaint();
+        
         
     }
 }
