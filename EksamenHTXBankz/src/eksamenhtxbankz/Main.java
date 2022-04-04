@@ -20,8 +20,10 @@ public class Main {
         //Gets the screen size, soloution from: https://www.codegrepper.com/code-examples/java/how+to+get+screen+width+and+hiehgt+java
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
+        double screenWidthData = screenSize.width / 2.5;
+        int screenWidth = (int)screenWidthData;
+        
+        int screenHeight = screenSize.height - (screenSize.height / 10);
         
         gui.setSize(screenWidth, screenHeight);
         
