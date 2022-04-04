@@ -15,4 +15,12 @@ public class MainWindow extends JFrame{
     private JButton homePlanUdgiftBtn;
     private JButton homeIndkomstBtn;
     private JButton homeOpsparBtn;
+    
+    public MainWindow() {
+        CreateComponents();
+    }
+    
+    private void CreateComponents(){
+        
+    }
 }
