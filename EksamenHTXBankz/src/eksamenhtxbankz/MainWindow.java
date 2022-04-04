@@ -4,10 +4,15 @@
 */
 package eksamenhtxbankz;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 
 public class MainWindow extends JFrame{
 
-    
+    private JButton homeKontoBtn;
+    private JButton homeUdgiftBtn;
+    private JButton homePlanUdgiftBtn;
+    private JButton homeIndkomstBtn;
+    private JButton homeOpsparBtn;
 }
