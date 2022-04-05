@@ -6,13 +6,14 @@ package eksamenhtxbankz;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 
 
 public class Main {
 
-
+    
     public static void main(String[] args) {
         //Start of GUI, creates an instance from MainWindow class which inherits from JFrame
         JFrame gui = new MainWindow();
@@ -29,6 +30,9 @@ public class Main {
         
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        
+        
+       
         gui.setVisible(true);
     }
     

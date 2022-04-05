@@ -39,7 +39,7 @@ public class MainWindow extends JFrame{
         
         
         
-        homeKontoBtn = new JButton("Konto");
+        homeKontoBtn = new JButton("Konto"); homeKontoBtn.setBounds(50, 50, 100, 100);
         homeUdgiftBtn = new JButton("Udgifter");
         homeIndkomstBtn = new JButton("Indkomst");
         homeOpsparBtn = new JButton("Hjælp til opspar");
@@ -88,6 +88,8 @@ public class MainWindow extends JFrame{
     
     private void CreateComponentsKonto(){
         kontoPanel = new JPanel();
+        
+        
         
     }
     
