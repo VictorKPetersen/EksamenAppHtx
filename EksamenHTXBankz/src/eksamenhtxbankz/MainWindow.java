@@ -4,8 +4,12 @@
 */
 package eksamenhtxbankz;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,7 +22,7 @@ public class MainWindow extends JFrame{
     JPanel indkomstPanel;
     JPanel opsparPanel;
     
-    
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     private JButton homeKontoBtn;
     private JButton homeUdgiftBtn;
@@ -36,13 +40,14 @@ public class MainWindow extends JFrame{
     
     private void CreateComponentsHome(){
         homePanel = new JPanel();
+        homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.Y_AXIS));
+        //homePanel.setBorder(BorderFactory.createEmptyBorder(screenSize.height/5, screenSize.width/10, 0, 0));
+        homePanel.setAlignmentX(CENTER_ALIGNMENT);
         
-        
-        
-        homeKontoBtn = new JButton("Konto"); homeKontoBtn.setBounds(50, 50, 100, 100);
-        homeUdgiftBtn = new JButton("Udgifter");
-        homeIndkomstBtn = new JButton("Indkomst");
-        homeOpsparBtn = new JButton("Hjælp til opspar");
+        homeKontoBtn = new JButton("Konto"); homeKontoBtn.setAlignmentX(CENTER_ALIGNMENT);
+        homeUdgiftBtn = new JButton("Udgifter"); homeUdgiftBtn.setAlignmentX(CENTER_ALIGNMENT);
+        homeIndkomstBtn = new JButton("Indkomst"); homeIndkomstBtn.setAlignmentX(CENTER_ALIGNMENT);
+        homeOpsparBtn = new JButton("Hjælp til opspar"); homeOpsparBtn.setAlignmentX(CENTER_ALIGNMENT);
         
        
         
