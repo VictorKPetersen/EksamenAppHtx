@@ -13,6 +13,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.XChartPanel;
+
+
 
 
 public class MainWindow extends JFrame{
@@ -28,6 +32,8 @@ public class MainWindow extends JFrame{
     private JButton homeUdgiftBtn;
     private JButton homeIndkomstBtn;
     private JButton homeOpsparBtn;
+    
+    private JButton backBtnHome;
     
     public MainWindow() {
         CreateComponentsHome();
@@ -49,7 +55,7 @@ public class MainWindow extends JFrame{
         homeIndkomstBtn = new JButton("Indkomst"); homeIndkomstBtn.setAlignmentX(CENTER_ALIGNMENT);
         homeOpsparBtn = new JButton("Hjælp til opspar"); homeOpsparBtn.setAlignmentX(CENTER_ALIGNMENT);
         
-       
+        
         
         homeKontoBtn.addActionListener(new ActionListener() {
             @Override
@@ -94,23 +100,82 @@ public class MainWindow extends JFrame{
     private void CreateComponentsKonto(){
         kontoPanel = new JPanel();
         
+        backBtnHome = new JButton("Back");
         
+        backBtnHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchPanels(kontoPanel, homePanel);
+            }
+        });
+        
+        
+        kontoPanel.add(backBtnHome);
         
     }
     
     private void CreateComponentsUdgift(){
         udgiftPanel = new JPanel();
+        udgiftPanel.setLayout(new BoxLayout(udgiftPanel, BoxLayout.Y_AXIS));
         
+        backBtnHome = new JButton("Back");
+        
+        backBtnHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchPanels(udgiftPanel, homePanel);
+            }
+        });
+        
+        ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
+        expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
+        expenseChart.addExpense("el", 20); // tilføj udgift
+        
+        
+        //brug for loop til addexpense fra database
+        /*for(int i = 0; i <= database.length; i++){
+            
+        }*/
+        XChartPanel<PieChart> expensePanel = expenseChart.getPanel();
+        
+        
+        udgiftPanel.add(backBtnHome);
+        udgiftPanel.add(expensePanel);
+        
+        //new SwingWrapper(pie_chart).displayChart();
     }
     
     private void CreateComponentsIndkomst(){
         indkomstPanel = new JPanel();
+        
+        backBtnHome = new JButton("Back");
+        
+        backBtnHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchPanels(indkomstPanel, homePanel);
+            }
+        });
+        
+        
+        indkomstPanel.add(backBtnHome);
         
     }
     
     private void CreateComponentsOpspar(){
         opsparPanel = new JPanel();
         
+        backBtnHome = new JButton("Back");
+        
+        backBtnHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchPanels(opsparPanel, homePanel);
+            }
+        });
+        
+        
+        opsparPanel.add(backBtnHome);
     }
     
     public void switchPanels(JPanel currentPanel, JPanel newPanel){
