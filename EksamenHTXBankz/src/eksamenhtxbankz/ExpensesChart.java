@@ -6,6 +6,7 @@
 package eksamenhtxbankz;
 
 
+import javax.swing.JLabel;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
@@ -26,8 +27,10 @@ public class ExpensesChart {
     }
     
     
-    public void addExpense(String name, int value){
+    public JLabel addExpense(String name, int value){
         pie_chart.addSeries(name, value);
+        
+        return new JLabel("Udgift: "+name+"        "+value+" kr.");
     }
     
     public XChartPanel<PieChart> getPanel(){

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XChartPanel;
@@ -34,6 +35,7 @@ public class MainWindow extends JFrame{
     private JButton homeOpsparBtn;
     
     private JButton backBtnHome;
+    
     
     public MainWindow() {
         CreateComponentsHome();
@@ -116,7 +118,7 @@ public class MainWindow extends JFrame{
     
     private void CreateComponentsUdgift(){
         udgiftPanel = new JPanel();
-        udgiftPanel.setLayout(new BoxLayout(udgiftPanel, BoxLayout.Y_AXIS));
+        udgiftPanel.setLayout(new BoxLayout(udgiftPanel, BoxLayout.Y_AXIS)); 
         
         backBtnHome = new JButton("Back");
         
@@ -127,20 +129,34 @@ public class MainWindow extends JFrame{
             }
         });
         
+        
         ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
-        expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
+        //expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
         expenseChart.addExpense("el", 20); // tilføj udgift
         
+        JLabel udgiftTemp = expenseChart.addExpense("mad", 20); udgiftTemp.setAlignmentX(CENTER_ALIGNMENT);
+        
+        //JLabel[] udgiftsListe = new JLabel[database.length];
         
         //brug for loop til addexpense fra database
         /*for(int i = 0; i <= database.length; i++){
+            JLabel udgiftTemp = expenseChart.addExpense(database[i].name, database[i].value);
+            udgiftPanel.add(expensePanel);
             
+            udgiftsListe[i] = udgiftTemp;
         }*/
         XChartPanel<PieChart> expensePanel = expenseChart.getPanel();
         
-        
         udgiftPanel.add(backBtnHome);
         udgiftPanel.add(expensePanel);
+        /*
+        for(int i = 0; i <= udgiftsListe.length; i++){
+            udgiftPanel.add(udgiftsListe[i]);
+        }
+        
+        */
+        
+        udgiftPanel.add(udgiftTemp);
         
         //new SwingWrapper(pie_chart).displayChart();
     }
