@@ -4,16 +4,21 @@
 */
 package eksamenhtxbankz;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
+import java.util.Locale;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XChartPanel;
 
@@ -21,20 +26,33 @@ import org.knowm.xchart.XChartPanel;
 
 
 public class MainWindow extends JFrame{
-    JPanel homePanel;
-    JPanel kontoPanel;
-    JPanel udgiftPanel;
-    JPanel indkomstPanel;
-    JPanel opsparPanel;
+    //Panel Class Variables
+    private JPanel homePanel;
+    private JPanel kontoPanel;
+    private JPanel udgiftPanel;
+    private JPanel indkomstPanel;
+    private JPanel opsparPanel;
     
+    //screenSize using java.awt.Toolkit
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
+    //Buttons for navigating panels
     private JButton homeKontoBtn;
     private JButton homeUdgiftBtn;
     private JButton homeIndkomstBtn;
     private JButton homeOpsparBtn;
     
-    private JButton backBtnHome;
+    //Universal return/back button
+    private JButton backHomeBtn;
+    
+    //Indkomst Panel
+    private JLabel totalIncomeTxt;
+    private JLabel totalIncome;
+ 
+
+    
+    private JTextField hoursAmountTxtField;
+    private JTextField hourlyRateTxtField;
     
     
     public MainWindow() {
@@ -43,7 +61,7 @@ public class MainWindow extends JFrame{
         CreateComponentsUdgift();
         CreateComponentsIndkomst();
         CreateComponentsOpspar();
-        
+           
     }
     
     private void CreateComponentsHome(){
@@ -102,9 +120,9 @@ public class MainWindow extends JFrame{
     private void CreateComponentsKonto(){
         kontoPanel = new JPanel();
         
-        backBtnHome = new JButton("Back");
+        backHomeBtn = new JButton("Tilbage");
         
-        backBtnHome.addActionListener(new ActionListener() {
+        backHomeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels(kontoPanel, homePanel);
@@ -112,7 +130,7 @@ public class MainWindow extends JFrame{
         });
         
         
-        kontoPanel.add(backBtnHome);
+        kontoPanel.add(backHomeBtn);
         
     }
     
@@ -120,9 +138,9 @@ public class MainWindow extends JFrame{
         udgiftPanel = new JPanel();
         udgiftPanel.setLayout(new BoxLayout(udgiftPanel, BoxLayout.Y_AXIS)); 
         
-        backBtnHome = new JButton("Back");
+        backHomeBtn = new JButton("Tilbage");
         
-        backBtnHome.addActionListener(new ActionListener() {
+        backHomeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels(udgiftPanel, homePanel);
@@ -147,7 +165,7 @@ public class MainWindow extends JFrame{
         }*/
         XChartPanel<PieChart> expensePanel = expenseChart.getPanel();
         
-        udgiftPanel.add(backBtnHome);
+        udgiftPanel.add(backHomeBtn);
         udgiftPanel.add(expensePanel);
         /*
         for(int i = 0; i <= udgiftsListe.length; i++){
@@ -163,27 +181,55 @@ public class MainWindow extends JFrame{
     
     private void CreateComponentsIndkomst(){
         indkomstPanel = new JPanel();
+        indkomstPanel.setLayout(new BoxLayout(indkomstPanel, BoxLayout.Y_AXIS));
         
-        backBtnHome = new JButton("Back");
+        backHomeBtn = new JButton("Tilbage"); backHomeBtn.setAlignmentX(CENTER_ALIGNMENT);
         
-        backBtnHome.addActionListener(new ActionListener() {
+        backHomeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels(indkomstPanel, homePanel);
             }
         });
         
+        totalIncomeTxt = new JLabel("Forventet Indkomst: "); totalIncomeTxt.setAlignmentX(CENTER_ALIGNMENT);
         
-        indkomstPanel.add(backBtnHome);
+        double doublePlaceHolder = 10000000.5923;
+        totalIncome = new JLabel(String.format(Locale.GERMAN, "%,.2f", doublePlaceHolder)); totalIncome.setAlignmentX(CENTER_ALIGNMENT);
         
+        
+        JPanel incomeNestedPanel = new JPanel(); incomeNestedPanel.setLayout(new BoxLayout(incomeNestedPanel, BoxLayout.X_AXIS));
+        incomeNestedPanel.setMaximumSize(new Dimension(Main.frameWidth / 3, Main.frameHeight / 8));
+
+        hoursAmountTxtField = new JTextField("Antal Timer"); hoursAmountTxtField.setAlignmentY(CENTER_ALIGNMENT);
+        hourlyRateTxtField = new JTextField("Time løn"); hourlyRateTxtField.setAlignmentY(CENTER_ALIGNMENT);
+
+        
+        incomeNestedPanel.add(hoursAmountTxtField);
+        incomeNestedPanel.add(hourlyRateTxtField);
+        
+        indkomstPanel.add(backHomeBtn);
+        indkomstPanel.add(Box.createRigidArea(new Dimension(0, 60)));
+        
+        indkomstPanel.add(totalIncomeTxt);
+        indkomstPanel.add(totalIncome);
+        
+        indkomstPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        
+        indkomstPanel.add(CreateHorizontalSeperator(Color.BLACK));
+        
+        indkomstPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        indkomstPanel.add(incomeNestedPanel);
+        indkomstPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        indkomstPanel.add(CreateHorizontalSeperator(Color.BLACK));
     }
     
     private void CreateComponentsOpspar(){
         opsparPanel = new JPanel();
         
-        backBtnHome = new JButton("Back");
+        backHomeBtn = new JButton("Tilbage");
         
-        backBtnHome.addActionListener(new ActionListener() {
+        backHomeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels(opsparPanel, homePanel);
@@ -191,8 +237,14 @@ public class MainWindow extends JFrame{
         });
         
         
-        opsparPanel.add(backBtnHome);
+        opsparPanel.add(backHomeBtn);
     }
+    
+    private JSeparator CreateHorizontalSeperator(Color color){
+        JSeparator HorizontalSeperator = new JSeparator(SwingConstants.HORIZONTAL);
+        HorizontalSeperator.setForeground(color); HorizontalSeperator.setBackground(color);
+        return HorizontalSeperator;
+    } 
     
     public void switchPanels(JPanel currentPanel, JPanel newPanel){
         

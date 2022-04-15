@@ -6,27 +6,27 @@ package eksamenhtxbankz;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 
 
 public class Main {
-
+    public static int frameWidth;
+    public static int frameHeight;
     
     public static void main(String[] args) {
-        //Start of GUI, creates an instance from MainWindow class which inherits from JFrame
-        JFrame gui = new MainWindow();
-        
-        //Gets the screen size, soloution from: https://www.codegrepper.com/code-examples/java/how+to+get+screen+width+and+hiehgt+java
+        //Gets the screen size using java.awt.Toolkit
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
         double screenWidthData = screenSize.width / 2.5;
-        int screenWidth = (int)screenWidthData;
+        frameWidth = (int)screenWidthData;
         
-        int screenHeight = screenSize.height - (screenSize.height / 10);
+        frameHeight = screenSize.height - (screenSize.height / 10);
         
-        gui.setSize(screenWidth, screenHeight);
+        //Start of GUI, creates an instance from MainWindow class which inherits from JFrame
+        JFrame gui = new MainWindow();
+        
+        gui.setSize(frameWidth, frameHeight);
         
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
