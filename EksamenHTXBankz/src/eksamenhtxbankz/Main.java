@@ -31,8 +31,6 @@ public class Main {
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
-        
-       
         gui.setVisible(true);
     }
     
