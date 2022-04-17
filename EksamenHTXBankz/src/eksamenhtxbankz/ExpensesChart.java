@@ -27,7 +27,7 @@ public class ExpensesChart {
     }
     
     
-    public JLabel addExpense(String name, int value){
+    public JLabel addExpense(String name, float value){
         pie_chart.addSeries(name, value);
         
         return new JLabel("Udgift: "+name+"        "+value+" kr.");
