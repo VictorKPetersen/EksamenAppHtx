@@ -155,8 +155,8 @@ public class MainWindow extends JFrame{
             }
         });
         
-        
-        ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
+        ExpensesChart expenseChart = bankDB.getUdgifterListe( new ExpensesChart(600,600));
+        //ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
         //expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
         //expenseChart.addExpense("el", 20); // tilføj udgift
         
@@ -168,7 +168,7 @@ public class MainWindow extends JFrame{
         
         ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
         JLabel udgiftTemp;
-        for(int i = 0; i <= bankDB.getCountOfCollumns(); i++){
+        /*for(int i = 0; i <= bankDB.getCountOfCollumns(); i++){
             System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
             
             try {
@@ -180,7 +180,7 @@ public class MainWindow extends JFrame{
             
             
             
-        }
+        }*/
         
         
         
@@ -188,11 +188,11 @@ public class MainWindow extends JFrame{
         
         udgiftPanel.add(backHomeBtn);
         udgiftPanel.add(expensePanel);
-        
+        /*
         for(int i = 0; i <= udgiftsListe.length; i++){
             udgiftPanel.add(udgiftsListe[i]);
         }
-        
+        */
         
         
         

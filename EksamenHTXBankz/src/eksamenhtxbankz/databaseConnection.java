@@ -93,7 +93,7 @@ public class databaseConnection {
         return rsmd;
     }
     
-    public JLabel[] getUdgifterListe(ExpensesChart expenseChart){
+    public ExpensesChart getUdgifterListe(ExpensesChart expenseChart){
         String sql = "SELECT * FROM Udgifter;";
         ResultSet rs = null;
         JLabel[] list = new JLabel[getCountOfCollumns()];
@@ -115,7 +115,7 @@ public class databaseConnection {
         catch (SQLException e) {
             System.out.println(e.getMessage());
         }   
-        return list;
+        return expenseChart;
     }
     
 }
