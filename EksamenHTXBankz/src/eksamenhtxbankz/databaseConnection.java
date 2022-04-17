@@ -7,8 +7,12 @@ package eksamenhtxbankz;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JLabel;
 
 /**
  *
@@ -22,7 +26,7 @@ public class databaseConnection {
     public static Connection connect() {
         Connection conn = null;
         try {
-            String url = "jdbc:sqlite:Bankz.db";
+            String url = "jdbc:sqlite:C:/Users/Victor B. Pedersen/Documents/GitHub/EksamenAppHtx/EksamenHTXBankz/src/eksamenhtxbankz/Bankz.db";
             conn = DriverManager.getConnection(url);
         } 
         catch (SQLException e) {
@@ -42,5 +46,76 @@ public class databaseConnection {
         }
     }
     
+    public int getCountOfCollumns(){
+        
+       String sql = "SELECT * FROM Udgifter;";
+       
+       try {
+           Statement stmt = connect().createStatement();
+           ResultSet rs = stmt.executeQuery(sql);
+           ResultSetMetaData rsmd = rs.getMetaData();
+           
+           int collumnCount = rsmd.getColumnCount();
+           stmt.close();
+           //int numberOfRows = ;
+           return collumnCount;//numberOfRows;
+       }
+       catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }   
+       return 0;
+    }
+    
+    public ResultSet getUdgifter(){
+        String sql = "SELECT * FROM Udgifter;";
+        ResultSet rs = null;
+        try {
+            Statement stmt = connect().createStatement();
+            rs = stmt.executeQuery(sql);
+            stmt.close();
+            
+            
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }   
+        return rs;
+    }
+    
+    public ResultSetMetaData getMetaRS(ResultSet rs){
+        ResultSetMetaData rsmd = null;
+        try {
+            rsmd = rs.getMetaData();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }   
+        return rsmd;
+    }
+    
+    public JLabel[] getUdgifterListe(ExpensesChart expenseChart){
+        String sql = "SELECT * FROM Udgifter;";
+        ResultSet rs = null;
+        JLabel[] list = new JLabel[getCountOfCollumns()];
+        try {
+            Statement stmt = connect().createStatement();
+            rs = stmt.executeQuery(sql);
+            stmt.close();
+            
+            ResultSetMetaData rsmd = getMetaRS(rs);
+            
+            int i = 0;
+            while(rs.next()){
+                JLabel udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
+                list[i] = udgiftTemp;
+                i++;
+            }
+            
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }   
+        return list;
+    }
     
 }

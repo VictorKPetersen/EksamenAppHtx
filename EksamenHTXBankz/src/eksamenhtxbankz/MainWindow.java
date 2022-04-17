@@ -9,7 +9,12 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -153,31 +158,44 @@ public class MainWindow extends JFrame{
         
         ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
         //expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
-        expenseChart.addExpense("el", 20); // tilføj udgift
+        //expenseChart.addExpense("el", 20); // tilføj udgift
         
-        JLabel udgiftTemp = expenseChart.addExpense("mad", 20); udgiftTemp.setAlignmentX(CENTER_ALIGNMENT);
-        
-        //JLabel[] udgiftsListe = new JLabel[database.length];
+        //JLabel udgiftTemp = expenseChart.addExpense("mad", 20); udgiftTemp.setAlignmentX(CENTER_ALIGNMENT);
+        ResultSet rs = bankDB.getUdgifter();
+        JLabel[] udgiftsListe = new JLabel[bankDB.getCountOfCollumns()];
         
         //brug for loop til addexpense fra database
-        /*for(int i = 0; i <= database.length; i++){
-            JLabel udgiftTemp = expenseChart.addExpense(database[i].name, database[i].value);
-            udgiftPanel.add(expensePanel);
+        
+        ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
+        JLabel udgiftTemp;
+        for(int i = 0; i <= bankDB.getCountOfCollumns(); i++){
+            System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
             
-            udgiftsListe[i] = udgiftTemp;
-        }*/
+            try {
+                udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
+                udgiftsListe[i] = udgiftTemp;
+            } catch (SQLException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+        
+        
+        
         XChartPanel<PieChart> expensePanel = expenseChart.getPanel();
         
         udgiftPanel.add(backHomeBtn);
         udgiftPanel.add(expensePanel);
-        /*
+        
         for(int i = 0; i <= udgiftsListe.length; i++){
             udgiftPanel.add(udgiftsListe[i]);
         }
         
-        */
         
-        udgiftPanel.add(udgiftTemp);
+        
+        
         
         //new SwingWrapper(pie_chart).displayChart();
     }
