@@ -6,6 +6,7 @@ package eksamenhtxbankz;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Locale;
 import javax.swing.JFrame;
 
 
@@ -24,12 +25,11 @@ public class Main {
         frameHeight = screenSize.height - (screenSize.height / 10);
         
         //Start of GUI, creates an instance from MainWindow class which inherits from JFrame
-        JFrame gui = new MainWindow();
+        JFrame gui = new MainWindow(Locale.GERMAN);
         
         gui.setSize(frameWidth, frameHeight);
         
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         
         gui.setVisible(true);
     }
