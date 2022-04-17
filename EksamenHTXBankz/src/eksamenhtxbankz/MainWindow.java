@@ -67,9 +67,11 @@ public class MainWindow extends JFrame{
     private JButton addOtherIncomeBtn;
     
     private Locale activeLocale;
-    
+    public databaseConnection bankDB;
     
     public MainWindow(Locale choosenLocale) {
+        bankDB = new databaseConnection();
+        
         CreateComponentsHome();
         CreateComponentsKonto();
         CreateComponentsUdgift();
