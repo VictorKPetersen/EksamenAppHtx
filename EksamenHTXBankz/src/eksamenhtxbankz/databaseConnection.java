@@ -26,7 +26,7 @@ public class databaseConnection {
     public static Connection connect() {
         Connection conn = null;
         try {
-            String url = "jdbc:sqlite:C:/Users/Victor B. Pedersen/Documents/GitHub/EksamenAppHtx/EksamenHTXBankz/src/eksamenhtxbankz/Bankz.db";
+            String url = "jdbc:sqlite:Bankz.db";
             conn = DriverManager.getConnection(url);
         } 
         catch (SQLException e) {
