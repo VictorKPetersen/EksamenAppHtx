@@ -22,7 +22,7 @@ public class databaseConnection {
     public static Connection connect() {
         Connection conn = null;
         try {
-            String url = "jdbc:sqlite:";
+            String url = "jdbc:sqlite:Bankz.db";
             conn = DriverManager.getConnection(url);
         } 
         catch (SQLException e) {

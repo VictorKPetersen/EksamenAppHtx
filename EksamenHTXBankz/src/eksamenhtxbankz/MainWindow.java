@@ -54,14 +54,17 @@ public class MainWindow extends JFrame{
     private JTextField hoursAmountTxtField;
     private JTextField hourlyRateTxtField;
     
+    public databaseConnection bankDB;
     
     public MainWindow() {
+        bankDB = new databaseConnection();
+        
         CreateComponentsHome();
         CreateComponentsKonto();
         CreateComponentsUdgift();
         CreateComponentsIndkomst();
         CreateComponentsOpspar();
-           
+        
     }
     
     private void CreateComponentsHome(){
