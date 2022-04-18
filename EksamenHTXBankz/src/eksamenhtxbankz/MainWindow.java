@@ -171,28 +171,34 @@ public class MainWindow extends JFrame{
         
         //JLabel udgiftTemp = expenseChart.addExpense("mad", 20); udgiftTemp.setAlignmentX(CENTER_ALIGNMENT);
         ResultSet rs = bankDB.getUdgifter();
+        ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
+        
         JLabel[] udgiftsListe = new JLabel[bankDB.getCountOfCollumns()];
         
         //brug for loop til addexpense fra database
-        System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
         
-        ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
+        
+        
         JLabel udgiftTemp;
         
+        String collumnName;
+        float collumnValue;
         
-        /*for(int i = 0; i <= bankDB.getCountOfCollumns(); i++){
-            System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
+        
+        for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
             
-            try {
-                udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
-                udgiftsListe[i] = udgiftTemp;
-            } catch (SQLException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            collumnName = bankDB.getCollumnNameForI(i);
+            collumnValue = bankDB.getCollumnValueForI(i);
+            
+            System.out.println("i: "+bankDB.getCountOfCollumns()+" name: "+collumnName + " value: " + collumnValue);
+            if(collumnName != null){
+               udgiftTemp = expenseChart.addExpense(collumnName, collumnValue);
+               udgiftsListe[i-1] = udgiftTemp;
+            } 
             
             
             
-        }*/
+        }
         
         
         
@@ -200,11 +206,12 @@ public class MainWindow extends JFrame{
         
         udgiftPanel.add(backHomeBtn);
         udgiftPanel.add(expensePanel);
-        /*
-        for(int i = 0; i <= udgiftsListe.length; i++){
+        
+        //tilføj udgifts liste
+        for(int i = 0; i <= udgiftsListe.length-1; i++){
             udgiftPanel.add(udgiftsListe[i]);
         }
-        */
+        
         
         
         

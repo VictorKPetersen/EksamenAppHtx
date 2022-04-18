@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
@@ -73,8 +75,6 @@ public class databaseConnection {
             Statement stmt = connect().createStatement();
             rs = stmt.executeQuery(sql);
             stmt.close();
-            
-            
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -118,4 +118,47 @@ public class databaseConnection {
         return expenseChart;
     }
     
+    public String getCollumnNameForI(int i){
+        
+        String sql = "SELECT * FROM Udgifter;";
+       
+        try {
+           Statement stmt = connect().createStatement();
+           ResultSet rs = stmt.executeQuery(sql);
+           ResultSetMetaData rsmd = rs.getMetaData();
+           
+           String collumnName = rsmd.getColumnName(i);
+           stmt.close();
+           //int numberOfRows = ;
+           return collumnName;//numberOfRows;
+        }
+        catch (SQLException e) {
+           System.out.println(e.getMessage());
+        }   
+        
+          
+        return null;
+    }
+    
+            
+    public float getCollumnValueForI(int i){
+        String sql = "SELECT * FROM Udgifter;";
+       
+        try {
+           Statement stmt = connect().createStatement();
+           ResultSet rs = stmt.executeQuery(sql);
+           
+           
+           float collumnValue = rs.getFloat(i);
+           stmt.close();
+           //int numberOfRows = ;
+           return collumnValue;//numberOfRows;
+        }
+        catch (SQLException e) {
+           System.out.println(e.getMessage());
+        }   
+        
+          
+        return 0;
+    }
 }
