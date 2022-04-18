@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import static java.lang.Integer.parseInt;
 
 import java.sql.ResultSet;
@@ -259,8 +262,8 @@ public class MainWindow extends JFrame{
         
         totalIncomeTxtLabel = new JLabel("Forventet Indkomst: "); totalIncomeTxtLabel.setAlignmentX(CENTER_ALIGNMENT);
         
-        double doubleTotalPlaceHolder = 10000000.5923;
-        totalIncomeLabel = new JLabel(String.format(activeLocale, "%,.2f", doubleTotalPlaceHolder)); totalIncomeLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        totalIncomeLabel = new JLabel(String.format(activeLocale, "%,.2f", 0000.0000)); totalIncomeLabel.setAlignmentX(CENTER_ALIGNMENT);
         
         
         JPanel incomeNestedPanel = new JPanel(); incomeNestedPanel.setLayout(new BoxLayout(incomeNestedPanel, BoxLayout.X_AXIS));
@@ -282,6 +285,18 @@ public class MainWindow extends JFrame{
             }
         });
         
+        //Stor Inspiration Herfra: https://stackhowto.com/how-to-make-jtextfield-accept-only-numbers/
+        hoursAmountTxtField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
+                    //This seems iniefficent
+                }
+                else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+        });
         hourlyRateTxtField = new JTextField("Time løn"); hourlyRateTxtField.setAlignmentY(CENTER_ALIGNMENT);
         
         hourlyRateTxtField.addFocusListener(new FocusListener() {
@@ -298,21 +313,90 @@ public class MainWindow extends JFrame{
             }
         });
         
-        double doubleTaxedPlaceHolder = 1000.234;
-        salaryTaxedLabel = new JLabel(String.format(activeLocale, "Løn inkl. Skat: %,.2f", doubleTaxedPlaceHolder)); salaryTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
+        hourlyRateTxtField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
+                    //This seems iniefficent
+                }
+                else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+        });
         
-        double doubleNonTaxedPlaceHolder = 10000.54356;
-        salaryNonTaxedLabel = new JLabel(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", doubleNonTaxedPlaceHolder)); salaryNonTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        salaryTaxedLabel = new JLabel(String.format(activeLocale, "Løn inkl. Skat: %,.2f", 0000.0000)); salaryTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
         
-        double doubleStateHelpPlaceHolder = 963;
-        stateHelpTxtField = new JTextField(String.format(activeLocale, "SU: %,.2f", doubleStateHelpPlaceHolder)); stateHelpTxtField.setAlignmentX(CENTER_ALIGNMENT);
+        salaryNonTaxedLabel = new JLabel(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", 0000.0000)); salaryNonTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
+        
+        stateHelpTxtField = new JTextField(String.format(activeLocale, "SU: %,.2f", 0000.0000)); stateHelpTxtField.setAlignmentX(CENTER_ALIGNMENT);
         stateHelpTxtField.setMaximumSize(new Dimension(Main.frameWidth / 3, Main.frameHeight / 8));
+        
+        stateHelpTxtField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                stateHelpTxtField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String tempInput = stateHelpTxtField.getText();
+                if (stateHelpTxtField.getText().replaceAll("\\s", "").equals("")) {
+                    stateHelpTxtField.setText(String.format(activeLocale, "SU: %,.2f", 0000.0000));
+                }
+                else{
+                stateHelpTxtField.setText(String.format(activeLocale, "SU: %,.2f", Double.parseDouble(tempInput)));
+                
+                }
+            }
+        });
+        
+        stateHelpTxtField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
+                    //This seems iniefficent
+                }
+                else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+        });
+        
+        
         
         JPanel otherIncomeNestedPanel = new JPanel(); otherIncomeNestedPanel.setLayout(new BoxLayout(otherIncomeNestedPanel, BoxLayout.X_AXIS));
         otherIncomeNestedPanel.setMaximumSize(new Dimension(Main.frameWidth / 3, Main.frameHeight / 8));
         
-        double doubleOtherIncomePlaceHolder = 0;
-        otherIncomeTxtField = new JTextField(String.format(activeLocale, "Anden enkelt indtægt: %,.2f", doubleOtherIncomePlaceHolder)); otherIncomeTxtField.setAlignmentY(CENTER_ALIGNMENT);
+        otherIncomeTxtField = new JTextField(String.format(activeLocale, "Anden enkelt indtægt: %,.2f", 0000.0000)); otherIncomeTxtField.setAlignmentY(CENTER_ALIGNMENT);
+        
+        otherIncomeTxtField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                otherIncomeTxtField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (otherIncomeTxtField.getText().replaceAll("\\s", "").equals("")) {
+                    otherIncomeTxtField.setText(String.format(activeLocale, "Anden enkelt indtægt: %,.2f", 0000.0000));
+                    
+                }
+            }
+        });
+        
+        otherIncomeTxtField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
+                    //This seems iniefficent
+                }
+                else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+        });
         
         addOtherIncomeBtn = new JButton("Tilføj"); addOtherIncomeBtn.setAlignmentY(CENTER_ALIGNMENT);
 
