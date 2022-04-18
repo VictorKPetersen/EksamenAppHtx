@@ -88,6 +88,7 @@ public class MainWindow extends JFrame{
     JLabel expenseCollumnLabel;
     JTextField expenseCollumnValue;
     JTextField[] expenseCollumnValues;
+    JLabel differenceToGoal;
     
     
     public MainWindow(Locale choosenLocale) {
@@ -371,6 +372,8 @@ public class MainWindow extends JFrame{
         
         withdrawalPrMonthTxtField = new JTextField("Udtræk Pr Måned (kr.)");
         
+        differenceToGoal = new JLabel("mål - reel: ");
+        
         withdrawalPrMonthTxtField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -384,6 +387,16 @@ public class MainWindow extends JFrame{
                 }
             }
         });
+        
+        withdrawalPrMonthTxtField.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    updateGoal();
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+                
+            });
+        
         
         expenseSliders = new JSlider[bankDB.getCountOfCollumns()];
         expenseCollumnLabels = new JLabel[bankDB.getCountOfCollumns()];
@@ -402,10 +415,10 @@ public class MainWindow extends JFrame{
                
                expenseTempSlider = new JSlider(0,20000,(int)collumnValue); expenseTempSlider.setAlignmentX(LEFT_ALIGNMENT);
                expenseTempSlider.setMajorTickSpacing(5000);expenseTempSlider.setMinorTickSpacing(1000); 
-               expenseTempSlider.setPaintTicks(true); expenseTempSlider.setPaintLabels(true); expenseTempSlider.setSnapToTicks(true);
+               expenseTempSlider.setPaintTicks(true); expenseTempSlider.setPaintLabels(true); //expenseTempSlider.setSnapToTicks(true);
                
                expenseSliders[i-1] = expenseTempSlider;
-               expenseCollumnValue = new JTextField(Float.toString(expenseTempSlider.getValue()));
+               expenseCollumnValue = new JTextField(Integer.toString(expenseTempSlider.getValue()));
                expenseCollumnValues[i-1] = expenseCollumnValue;
             }  
         }
@@ -424,6 +437,7 @@ public class MainWindow extends JFrame{
                    @Override
                    public void stateChanged(ChangeEvent e) {
                        updateSliderLabelValues();
+                       updateGoal();
                        //expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()));
                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                    }
@@ -433,11 +447,13 @@ public class MainWindow extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     updateSliderValues();
+                    updateGoal();
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
                 
             });
         }
+        opsparPanel.add(differenceToGoal);
         
         
         
@@ -445,16 +461,32 @@ public class MainWindow extends JFrame{
     
     public void updateSliderLabelValues(){
         for(int i = 0; i <= expenseSliders.length-1; i++){
-            expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()) + " kr.");
+            expenseSliders[i].setSnapToTicks(true);
+            expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()));
+            
             
         }
     }
     
     public void updateSliderValues(){
         for(int i = 0; i <= expenseCollumnValues.length-1; i++){
+            expenseSliders[i].setSnapToTicks(false);
             expenseSliders[i].setValue(parseInt(expenseCollumnValues[i].getText()));
             
         }
+    }
+    
+    //NOTE: skal senere bruge indkomst værdi istedet for udgifter fra db
+    public void updateGoal(){
+        float sumOfSliderVals = 0;
+        float sumOfDBVals = 0;
+        for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
+            sumOfSliderVals += expenseSliders[i-1].getValue();
+            sumOfDBVals += bankDB.getCollumnValueForI(i);
+        }
+        System.out.println(sumOfSliderVals + " : " + sumOfDBVals);
+        differenceToGoal.setText("mål - reel: " + ((sumOfDBVals - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));
+        
     }
     
     private JSeparator CreateHorizontalSeperator(Color color){
