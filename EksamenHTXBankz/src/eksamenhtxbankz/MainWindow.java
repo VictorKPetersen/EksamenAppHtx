@@ -35,6 +35,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XChartPanel;
 
@@ -248,6 +250,8 @@ public class MainWindow extends JFrame{
     }
     
     private void CreateComponentsIndkomst(){
+        Calculator salaryCalc = new Calculator(0.0, 0.0);
+        
         indkomstPanel = new JPanel();
         indkomstPanel.setLayout(new BoxLayout(indkomstPanel, BoxLayout.Y_AXIS));
         
@@ -297,6 +301,30 @@ public class MainWindow extends JFrame{
                 }
             }
         });
+        
+        hoursAmountTxtField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    salaryCalc.hours = Double.parseDouble(hoursAmountTxtField.getText());
+                } catch (NumberFormatException TException) {
+                    System.out.println("User Didn't change value, Exception: " + TException);
+                }
+                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcSalary()));
+                
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+        });
+        
         hourlyRateTxtField = new JTextField("Time løn"); hourlyRateTxtField.setAlignmentY(CENTER_ALIGNMENT);
         
         hourlyRateTxtField.addFocusListener(new FocusListener() {
@@ -322,6 +350,29 @@ public class MainWindow extends JFrame{
                 else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
                     e.consume();
                 }
+            }
+        });
+        
+        hourlyRateTxtField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    salaryCalc.hourlyRate = Double.parseDouble(hourlyRateTxtField.getText());
+                } catch (NumberFormatException TException) {
+                    System.out.println("User Didn't change value, Exception: " + TException);
+                }
+                
+                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcSalary()));  
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
             }
         });
         
