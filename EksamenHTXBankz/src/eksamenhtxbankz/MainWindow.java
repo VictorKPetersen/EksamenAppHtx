@@ -174,9 +174,12 @@ public class MainWindow extends JFrame{
         JLabel[] udgiftsListe = new JLabel[bankDB.getCountOfCollumns()];
         
         //brug for loop til addexpense fra database
+        System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
         
         ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
         JLabel udgiftTemp;
+        
+        
         /*for(int i = 0; i <= bankDB.getCountOfCollumns(); i++){
             System.out.println("i: "+bankDB.getCountOfCollumns()+" name: ");
             
