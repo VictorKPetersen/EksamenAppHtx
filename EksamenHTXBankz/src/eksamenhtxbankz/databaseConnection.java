@@ -93,30 +93,7 @@ public class databaseConnection {
         return rsmd;
     }
     
-    public ExpensesChart getUdgifterListe(ExpensesChart expenseChart){
-        String sql = "SELECT * FROM Udgifter;";
-        ResultSet rs = null;
-        JLabel[] list = new JLabel[getCountOfCollumns()];
-        try {
-            Statement stmt = connect().createStatement();
-            rs = stmt.executeQuery(sql);
-            stmt.close();
-            
-            ResultSetMetaData rsmd = getMetaRS(rs);
-            
-            int i = 0;
-            while(rs.next()){
-                JLabel udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
-                list[i] = udgiftTemp;
-                i++;
-            }
-            
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }   
-        return expenseChart;
-    }
+    
     
     public String getCollumnNameForI(int i){
         
@@ -161,4 +138,32 @@ public class databaseConnection {
           
         return 0;
     }
+    
+    
+    /* Deprecated
+    public ExpensesChart getUdgifterListe(ExpensesChart expenseChart){
+        String sql = "SELECT * FROM Udgifter;";
+        ResultSet rs = null;
+        JLabel[] list = new JLabel[getCountOfCollumns()];
+        try {
+            Statement stmt = connect().createStatement();
+            rs = stmt.executeQuery(sql);
+            stmt.close();
+            
+            ResultSetMetaData rsmd = getMetaRS(rs);
+            
+            int i = 0;
+            while(rs.next()){
+                JLabel udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
+                list[i] = udgiftTemp;
+                i++;
+            }
+            
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }   
+        return expenseChart;
+    }
+    */
 }

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import static java.lang.Integer.parseInt;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -26,8 +27,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XChartPanel;
 
@@ -42,7 +46,7 @@ public class MainWindow extends JFrame{
     private JPanel indkomstPanel;
     private JPanel opsparPanel;
      
-    //Buttons for navigating panels
+    //Buttons for navigating panels på homepanelet
     private JButton homeKontoBtn;
     private JButton homeUdgiftBtn;
     private JButton homeIndkomstBtn;
@@ -54,20 +58,37 @@ public class MainWindow extends JFrame{
     //Indkomst Panel
     private JLabel totalIncomeTxtLabel;
     private JLabel totalIncomeLabel;
- 
     private JTextField hoursAmountTxtField;
     private JTextField hourlyRateTxtField;
-    
     private JLabel salaryTaxedLabel;
     private JLabel salaryNonTaxedLabel;
-    
     private JTextField stateHelpTxtField;
     private JTextField otherIncomeTxtField;
-    
     private JButton addOtherIncomeBtn;
     
     private Locale activeLocale;
+    
+    //Udgifter panel
+    ExpensesChart expenseChart; //chart af udgifter
+    JLabel udgiftTemp; //temporary udgift som pulles fra DB
+    JLabel[] udgiftsListe; // liste af udgifts labels
+    XChartPanel<PieChart> expensePanel; // panel fra expensechart
+            
+    //Database
     public databaseConnection bankDB;
+    ResultSet rs;
+    ResultSetMetaData rsmd;
+    
+    //opspar panel
+    JLabel incomeTxt;
+    JTextField withdrawalPrMonthTxtField;
+    JSlider[] expenseSliders;
+    JSlider expenseTempSlider;
+    JLabel[] expenseCollumnLabels;
+    JLabel expenseCollumnLabel;
+    JTextField expenseCollumnValue;
+    JTextField[] expenseCollumnValues;
+    
     
     public MainWindow(Locale choosenLocale) {
         bankDB = new databaseConnection();
@@ -164,27 +185,30 @@ public class MainWindow extends JFrame{
             }
         });
         
-        ExpensesChart expenseChart = bankDB.getUdgifterListe( new ExpensesChart(600,600));
-        //ExpensesChart expenseChart = new ExpensesChart(600,600); // build chart
+        //ExpensesChart expenseChart = bankDB.getUdgifterListe( new ExpensesChart(600,600));
+        
         //expenseChart.addExpense("mad", 20); // tilføj udgift, værdi insættes som kr brugt
         //expenseChart.addExpense("el", 20); // tilføj udgift
         
         //JLabel udgiftTemp = expenseChart.addExpense("mad", 20); udgiftTemp.setAlignmentX(CENTER_ALIGNMENT);
-        ResultSet rs = bankDB.getUdgifter();
-        ResultSetMetaData rsmd = bankDB.getMetaRS(rs);
         
-        JLabel[] udgiftsListe = new JLabel[bankDB.getCountOfCollumns()];
+        expenseChart = new ExpensesChart(600,600); // build chart
         
-        //brug for loop til addexpense fra database
+        rs = bankDB.getUdgifter();
+        rsmd = bankDB.getMetaRS(rs);
         
-        
-        
-        JLabel udgiftTemp;
-        
-        String collumnName;
-        float collumnValue;
+        udgiftsListe = new JLabel[bankDB.getCountOfCollumns()];
         
         
+        
+        
+        
+        
+        
+        String collumnName; //temporary collumn navn som pulles fra DB
+        float collumnValue; //temporary collumn værdi som pulles fra DB
+        
+        //tilføj udgifter
         for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
             
             collumnName = bankDB.getCollumnNameForI(i);
@@ -192,7 +216,7 @@ public class MainWindow extends JFrame{
             
             System.out.println("i: "+bankDB.getCountOfCollumns()+" name: "+collumnName + " value: " + collumnValue);
             if(collumnName != null){
-               udgiftTemp = expenseChart.addExpense(collumnName, collumnValue);
+               udgiftTemp = expenseChart.addExpense(collumnName, collumnValue); 
                udgiftsListe[i-1] = udgiftTemp;
             } 
             
@@ -202,7 +226,7 @@ public class MainWindow extends JFrame{
         
         
         
-        XChartPanel<PieChart> expensePanel = expenseChart.getPanel();
+        expensePanel = expenseChart.getPanel(); //lav expensechartet om til panel
         
         udgiftPanel.add(backHomeBtn);
         udgiftPanel.add(expensePanel);
@@ -216,7 +240,7 @@ public class MainWindow extends JFrame{
         
         
         
-        //new SwingWrapper(pie_chart).displayChart();
+        
     }
     
     private void CreateComponentsIndkomst(){
@@ -331,8 +355,9 @@ public class MainWindow extends JFrame{
     
     private void CreateComponentsOpspar(){
         opsparPanel = new JPanel();
+        opsparPanel.setLayout(new BoxLayout(opsparPanel, BoxLayout.Y_AXIS));
         
-        backHomeBtn = new JButton("Tilbage");
+        backHomeBtn = new JButton("Tilbage"); 
         
         backHomeBtn.addActionListener(new ActionListener() {
             @Override
@@ -341,8 +366,95 @@ public class MainWindow extends JFrame{
             }
         });
         
+        incomeTxt = new JLabel("forventet indkomst: "); 
+        
+        
+        withdrawalPrMonthTxtField = new JTextField("Udtræk Pr Måned (kr.)");
+        
+        withdrawalPrMonthTxtField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                withdrawalPrMonthTxtField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (withdrawalPrMonthTxtField.getText().replaceAll("\\s", "").equals("")) {
+                    withdrawalPrMonthTxtField.setText("Udtræk Pr Måned (kr.)");
+                }
+            }
+        });
+        
+        expenseSliders = new JSlider[bankDB.getCountOfCollumns()];
+        expenseCollumnLabels = new JLabel[bankDB.getCountOfCollumns()];
+        expenseCollumnValues = new JTextField[bankDB.getCountOfCollumns()];
+        
+        for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
+            
+            String collumnName = bankDB.getCollumnNameForI(i);
+            float collumnValue = bankDB.getCollumnValueForI(i);
+            
+            
+            if(collumnName != null){
+                
+               expenseCollumnLabel = new JLabel(collumnName); 
+               expenseCollumnLabels[i-1] = expenseCollumnLabel; 
+               
+               expenseTempSlider = new JSlider(0,20000,(int)collumnValue); expenseTempSlider.setAlignmentX(LEFT_ALIGNMENT);
+               expenseTempSlider.setMajorTickSpacing(5000);expenseTempSlider.setMinorTickSpacing(1000); 
+               expenseTempSlider.setPaintTicks(true); expenseTempSlider.setPaintLabels(true); expenseTempSlider.setSnapToTicks(true);
+               
+               expenseSliders[i-1] = expenseTempSlider;
+               expenseCollumnValue = new JTextField(Float.toString(expenseTempSlider.getValue()));
+               expenseCollumnValues[i-1] = expenseCollumnValue;
+            }  
+        }
+        
         
         opsparPanel.add(backHomeBtn);
+        
+        opsparPanel.add(incomeTxt);
+        opsparPanel.add(withdrawalPrMonthTxtField);
+        
+        for(int i = 0; i <= expenseSliders.length-1; i++){
+            opsparPanel.add(expenseCollumnLabels[i]);
+            opsparPanel.add(expenseSliders[i]);
+            
+            expenseSliders[i].addChangeListener(new ChangeListener(){
+                   @Override
+                   public void stateChanged(ChangeEvent e) {
+                       updateSliderLabelValues();
+                       //expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()));
+                       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                   }
+               });
+            opsparPanel.add(expenseCollumnValues[i]);
+            expenseCollumnValues[i].addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    updateSliderValues();
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+                
+            });
+        }
+        
+        
+        
+    }
+    
+    public void updateSliderLabelValues(){
+        for(int i = 0; i <= expenseSliders.length-1; i++){
+            expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()) + " kr.");
+            
+        }
+    }
+    
+    public void updateSliderValues(){
+        for(int i = 0; i <= expenseCollumnValues.length-1; i++){
+            expenseSliders[i].setValue(parseInt(expenseCollumnValues[i].getText()));
+            
+        }
     }
     
     private JSeparator CreateHorizontalSeperator(Color color){
