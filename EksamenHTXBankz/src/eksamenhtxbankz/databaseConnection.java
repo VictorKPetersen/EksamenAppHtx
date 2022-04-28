@@ -13,18 +13,21 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
+
 
 /**
  *
  * @author Victor B. Pedersen
+ * 
+ * Til at connecte til db samt trække forskellige data
  */
 public class databaseConnection {
     
     
     
-    //Opretter et sammenspil mellem database og kode
+    /**
+     * Opretter et sammenspil mellem database og kode
+     */
     public static Connection connect() {
         Connection conn = null;
         try {
