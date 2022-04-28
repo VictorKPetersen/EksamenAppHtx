@@ -65,30 +65,31 @@ public class MainWindow extends JFrame{
     private JTextField stateHelpTxtField;
     private JTextField otherIncomeTxtField;
     private JButton addOtherIncomeBtn;
+    private JTextField communalTaxTxtField;
     
     private Locale activeLocale;
     
     //Udgifter panel
-    ExpensesChart expenseChart; //chart af udgifter
-    JLabel udgiftTemp; //temporary udgift som pulles fra DB
-    JLabel[] udgiftsListe; // liste af udgifts labels
-    XChartPanel<PieChart> expensePanel; // panel fra expensechart
+    private ExpensesChart expenseChart; //chart af udgifter
+    private JLabel udgiftTemp; //temporary udgift som pulles fra DB
+    private JLabel[] udgiftsListe; // liste af udgifts labels
+    private XChartPanel<PieChart> expensePanel; // panel fra expensechart
             
     //Database
     public databaseConnection bankDB;
-    ResultSet rs;
-    ResultSetMetaData rsmd;
+    private ResultSet rs;
+    private ResultSetMetaData rsmd;
     
     //opspar panel
-    JLabel incomeTxt;
-    JTextField withdrawalPrMonthTxtField;
-    JSlider[] expenseSliders;
-    JSlider expenseTempSlider;
-    JLabel[] expenseCollumnLabels;
-    JLabel expenseCollumnLabel;
-    JTextField expenseCollumnValue;
-    JTextField[] expenseCollumnValues;
-    JLabel differenceToGoal;
+    private JLabel incomeTxt;
+    private JTextField withdrawalPrMonthTxtField;
+    private JSlider[] expenseSliders;
+    private JSlider expenseTempSlider;
+    private JLabel[] expenseCollumnLabels;
+    private JLabel expenseCollumnLabel;
+    private JTextField expenseCollumnValue;
+    private JTextField[] expenseCollumnValues;
+    private JLabel differenceToGoal;
     
     
     public MainWindow(Locale choosenLocale) {
@@ -235,13 +236,7 @@ public class MainWindow extends JFrame{
         //tilføj udgifts liste
         for(int i = 0; i <= udgiftsListe.length-1; i++){
             udgiftPanel.add(udgiftsListe[i]);
-        }
-        
-        
-        
-        
-        
-        
+        }  
     }
     
     private void CreateComponentsIndkomst(){
@@ -288,6 +283,7 @@ public class MainWindow extends JFrame{
         hoursAmountTxtField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
+                System.out.println(e.getKeyChar());
                 if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
                     //This seems iniefficent
                 }
@@ -305,7 +301,7 @@ public class MainWindow extends JFrame{
                 } catch (NumberFormatException TException) {
                     System.out.println("User Didn't change value, Exception: " + TException);
                 }
-                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcSalary()));
+                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
                 
             }
 
@@ -357,7 +353,7 @@ public class MainWindow extends JFrame{
                     System.out.println("User Didn't change value, Exception: " + TException);
                 }
                 
-                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcSalary()));  
+                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));  
             }
 
             @Override
@@ -370,6 +366,10 @@ public class MainWindow extends JFrame{
                 //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
             }
         });
+        
+        communalTaxTxtField = new JTextField(String.format(activeLocale, "Kommunal Skat: %,.2f", 0000.0000)); communalTaxTxtField.setAlignmentX(CENTER_ALIGNMENT);
+        communalTaxTxtField.setMaximumSize(new Dimension(Main.frameWidth / 3, Main.frameHeight / 8));
+        
         
 
         salaryTaxedLabel = new JLabel(String.format(activeLocale, "Løn inkl. Skat: %,.2f", 0000.0000)); salaryTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -462,10 +462,13 @@ public class MainWindow extends JFrame{
         
         indkomstPanel.add(CreateHorizontalSeperator(Color.BLACK));
         
+        
         indkomstPanel.add(Box.createRigidArea(new Dimension(0, Main.frameHeight / 97)));
         indkomstPanel.add(incomeNestedPanel);
         indkomstPanel.add(Box.createRigidArea(new Dimension(0, Main.frameHeight / 97)));
         indkomstPanel.add(CreateHorizontalSeperator(Color.BLACK));
+        
+        indkomstPanel.add(communalTaxTxtField);
         
         indkomstPanel.add(Box.createRigidArea(new Dimension(0, Main.frameHeight / 10)));
         
