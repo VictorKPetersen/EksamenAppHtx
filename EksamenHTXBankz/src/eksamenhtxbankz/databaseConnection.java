@@ -7,24 +7,25 @@ package eksamenhtxbankz;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
+
 
 /**
  *
  * @author Victor B. Pedersen
+ * 
+ * Til at connecte til db samt trække forskellige data
  */
 public class databaseConnection {
     
     
     
-    //Opretter et sammenspil mellem database og kode
+    /**
+     * Opretter et sammenspil mellem database og kode
+     */
     public static Connection connect() {
         Connection conn = null;
         try {
@@ -36,7 +37,11 @@ public class databaseConnection {
         } 
         return conn;
     }
-    //Kode der kører diverse sql statements såsom drop table og create table
+    /**
+     * Kode der laver og kører diverse sql statements såsom f.eks. drop table og create table
+     * 
+     * @param sql - selve sql koden der skal køres 
+     */
     public void createSQLStatement(String sql){
         try {
             Statement stmt = connect().createStatement(); //Connecter  til DB og laver et statement
@@ -47,6 +52,12 @@ public class databaseConnection {
             System.out.println(e.getMessage());
         }
     }
+    
+    /**
+     * 
+     * Metoden er til at få antallet af kolonner fra database tabellen "Udgifter"
+     * 
+     */
     
     public int getCountOfCollumns(){
         
@@ -68,6 +79,10 @@ public class databaseConnection {
        return 0;
     }
     
+    /**
+     * 
+     * Metoden er til at få udgifter fra udgiftstabel som resultset
+     */
     public ResultSet getUdgifter(){
         String sql = "SELECT * FROM Udgifter;";
         ResultSet rs = null;
@@ -82,6 +97,11 @@ public class databaseConnection {
         return rs;
     }
     
+    
+    /**
+     * Metoden er til få metadataen fra et resultset
+     * @param rs
+     */
     public ResultSetMetaData getMetaRS(ResultSet rs){
         ResultSetMetaData rsmd = null;
         try {
