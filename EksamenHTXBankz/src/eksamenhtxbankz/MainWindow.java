@@ -240,7 +240,7 @@ public class MainWindow extends JFrame{
     }
     
     private void CreateComponentsIndkomst(){
-        Calculator salaryCalc = new Calculator(0.0, 0.0);
+        Calculator salaryCalc = new Calculator();
         
         indkomstPanel = new JPanel();
         indkomstPanel.setLayout(new BoxLayout(indkomstPanel, BoxLayout.Y_AXIS));
@@ -283,7 +283,6 @@ public class MainWindow extends JFrame{
         hoursAmountTxtField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println(e.getKeyChar());
                 if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
                     //This seems iniefficent
                 }
@@ -299,9 +298,10 @@ public class MainWindow extends JFrame{
                 try {
                     salaryCalc.hours = Double.parseDouble(hoursAmountTxtField.getText());
                 } catch (NumberFormatException TException) {
-                    System.out.println("User Didn't change value, Exception: " + TException);
+                    System.out.println("Non numberic characther in string: " + TException);
                 }
                 salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
+                salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
                 
             }
 
@@ -350,10 +350,11 @@ public class MainWindow extends JFrame{
                 try {
                     salaryCalc.hourlyRate = Double.parseDouble(hourlyRateTxtField.getText());
                 } catch (NumberFormatException TException) {
-                    System.out.println("User Didn't change value, Exception: " + TException);
+                    System.out.println("Non numberic characther in string: " + TException);
                 }
                 
-                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));  
+                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
+                salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
             }
 
             @Override
@@ -367,9 +368,61 @@ public class MainWindow extends JFrame{
             }
         });
         
-        communalTaxTxtField = new JTextField(String.format(activeLocale, "Kommunal Skat: %,.2f", 0000.0000)); communalTaxTxtField.setAlignmentX(CENTER_ALIGNMENT);
+        communalTaxTxtField = new JTextField(String.format(activeLocale, "Kommunal Skat: %,.2f p.", 0000.0000)); communalTaxTxtField.setAlignmentX(CENTER_ALIGNMENT);
         communalTaxTxtField.setMaximumSize(new Dimension(Main.frameWidth / 3, Main.frameHeight / 8));
         
+        communalTaxTxtField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                communalTaxTxtField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String tempInput = communalTaxTxtField.getText();
+                if (communalTaxTxtField.getText().replaceAll("\\s", "").equals("")) {
+                    communalTaxTxtField.setText(String.format(activeLocale, "Kommunal Skat: %,.2f p.", 0000.0000));
+                }
+                else {
+                    communalTaxTxtField.setText(String.format(activeLocale, "Kommunal Skat: %,.2f p.", Double.parseDouble(tempInput)));
+                }
+            }
+        });
+        
+        communalTaxTxtField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_PERIOD || e.getKeyChar() == KeyEvent.VK_DECIMAL){
+                    //This seems iniefficent
+                }
+                else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+        });
+        
+        communalTaxTxtField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Double textFieldValue = Double.parseDouble(communalTaxTxtField.getText().replaceAll(".^\\d", ""));
+                    salaryCalc.setTaxBrackets(textFieldValue / 100);
+                    salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                } catch (NumberFormatException TException) {
+                    System.out.println("Non numberic characther in string: " + TException);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                 //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                 //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+        });
         
 
         salaryTaxedLabel = new JLabel(String.format(activeLocale, "Løn inkl. Skat: %,.2f", 0000.0000)); salaryTaxedLabel.setAlignmentX(CENTER_ALIGNMENT);
