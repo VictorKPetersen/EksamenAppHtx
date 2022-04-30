@@ -11,12 +11,15 @@ package eksamenhtxbankz;
 public class Calculator {
     public double hourlyRate;
     public double hours;
+    public double suSalary;
+    private double otherIncome;
     private double nonTaxedSalary;
-    private  double taxedSalary;
+    private double taxedSalary;
+
     
     
     //Tax for 2022 taken from https://www.legaldesk.dk/artikler/topskat
-    private double taxCap = 50045;
+    private double taxCap;
     
     private double totalLowerTax;
     
@@ -27,7 +30,9 @@ public class Calculator {
      * Calculator.java's constructor, sætter instansens forskellige variabler
      */
     public Calculator() {
-        this.taxCap = 544800;
+        this.taxCap = 50045;
+        this.suSalary = 0.0;
+        this.otherIncome = 0.0;
         this.totalLowerTax = 0.1216 + 0.08;
         this.totalUpperTax = 0.1216 + 0.08 + 0.15;
     }
@@ -38,7 +43,7 @@ public class Calculator {
      * @return - indkomst uden skat aftrukket
      */
     public double calcNonTaxedSalary(){
-        nonTaxedSalary = hourlyRate * hours;
+        nonTaxedSalary = hourlyRate * hours + suSalary + otherIncome;
         return nonTaxedSalary;
     }
     
@@ -63,11 +68,28 @@ public class Calculator {
      */
     public void setTaxBrackets(double decimalCommunalTax) {
         totalLowerTax = decimalCommunalTax + 0.1216 + 0.08;
+        if (totalLowerTax >= 0.5207) {
+            totalLowerTax = 0.5207;
+        }
+        
         if (totalLowerTax + 0.15 <= 0.5207) {
-            totalUpperTax = totalLowerTax + 0.15;
+            totalUpperTax = totalLowerTax + 0.15;;
         } else {
             totalUpperTax = 0.5207;
         }
+    }
+    
+    public void addOtherIncome (double incomeToAdd){
+        otherIncome += incomeToAdd;
+    }
+            
+    
+    /**
+     * Til at få indkomsternete samlet
+     * @return - Samlet forventet indkomst
+     */
+    public double getExpectedIncome() {
+        return taxedSalary;
     }
     
 }

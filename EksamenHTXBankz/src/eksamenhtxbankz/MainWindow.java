@@ -325,10 +325,8 @@ public class MainWindow extends JFrame{
                 } catch (NumberFormatException TException) {
                     System.out.println("Non numberic characther in string: " + TException);
                 }
-                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
-                salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                updateSalaryFields(salaryCalc);
                 salaryTaxedValue = salaryCalc.calcTaxedSalary();
-                
             }
 
             @Override
@@ -379,8 +377,7 @@ public class MainWindow extends JFrame{
                     System.out.println("Non numberic characther in string: " + TException);
                 }
                 
-                salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
-                salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                updateSalaryFields(salaryCalc);
                 salaryTaxedValue = salaryCalc.calcTaxedSalary();
             }
 
@@ -434,8 +431,7 @@ public class MainWindow extends JFrame{
                 try {
                     Double textFieldValue = Double.parseDouble(communalTaxTxtField.getText().replaceAll(".^\\d", ""));
                     salaryCalc.setTaxBrackets(textFieldValue / 100);
-                    salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
-                    salaryTaxedValue = salaryCalc.calcTaxedSalary();
+                    updateSalaryFields(salaryCalc);
                 } catch (NumberFormatException TException) {
                     System.out.println("Non numberic characther in string: " + TException);
                 }
@@ -474,10 +470,10 @@ public class MainWindow extends JFrame{
                 }
                 else{
                 stateHelpTxtField.setText(String.format(activeLocale, "SU: %,.2f", Double.parseDouble(tempInput)));
-                
                 }
             }
         });
+        
         
         stateHelpTxtField.addKeyListener(new KeyAdapter() {
             @Override
@@ -488,6 +484,29 @@ public class MainWindow extends JFrame{
                 else if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
                     e.consume();
                 }
+            }
+        });
+        
+        stateHelpTxtField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    Double textFieldValue = Double.parseDouble(stateHelpTxtField.getText().replaceAll(".^\\d", ""));
+                    salaryCalc.suSalary = textFieldValue;
+                    updateSalaryFields(salaryCalc);
+                } catch (Exception TException) {
+                    System.out.println("Non numberic characther in string: " + TException);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Only here becausse DocumentListener is not abstract and doesn't have an Adapter Class
             }
         });
         
@@ -525,7 +544,22 @@ public class MainWindow extends JFrame{
             }
         });
         
+        
         addOtherIncomeBtn = new JButton("Tilføj"); addOtherIncomeBtn.setAlignmentY(CENTER_ALIGNMENT);
+        
+        addOtherIncomeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                double incomeToAdd = Double.parseDouble(otherIncomeTxtField.getText());
+                salaryCalc.addOtherIncome(incomeToAdd);
+                    updateSalaryFields(salaryCalc);
+                } catch (Exception TException) {
+                    System.out.println("Non numberic characther in string: " + TException);
+                }
+
+            }
+        });
 
         
         incomeNestedPanel.add(hoursAmountTxtField); incomeNestedPanel.add(Box.createRigidArea(new Dimension(10, 0))); incomeNestedPanel.add(hourlyRateTxtField);
@@ -725,6 +759,16 @@ public class MainWindow extends JFrame{
         HorizontalSeperator.setForeground(color); HorizontalSeperator.setBackground(color);
         return HorizontalSeperator;
     } 
+  
+    /**
+     * Til opdatering af diverse felter som viser indkomst
+     * @param sCalculator brugte instans af Calculator klassen
+     */
+    private void updateSalaryFields(Calculator sCalculator) {
+        salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", sCalculator.calcNonTaxedSalary()));
+        salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", sCalculator.calcTaxedSalary()));
+        totalIncomeLabel.setText(String.format(activeLocale, "%,.2f", sCalculator.getExpectedIncome()));
+    }
     
     
     /**
