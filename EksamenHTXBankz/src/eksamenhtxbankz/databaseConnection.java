@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package eksamenhtxbankz;
 
 import java.sql.Connection;
@@ -15,9 +11,8 @@ import java.sql.Statement;
 
 /**
  *
- * @author Victor B. Pedersen
- * 
  * Til at connecte til db samt trække forskellige data
+ * @author Victor B. Pedersen
  */
 public class databaseConnection {
     
@@ -25,6 +20,7 @@ public class databaseConnection {
     
     /**
      * Opretter et sammenspil mellem database og kode
+     * @return - connection til db
      */
     public static Connection connect() {
         Connection conn = null;
@@ -37,10 +33,11 @@ public class databaseConnection {
         } 
         return conn;
     }
+    
     /**
      * Kode der laver og kører diverse sql statements såsom f.eks. drop table og create table
      * 
-     * @param sql - selve sql koden der skal køres 
+     * @param sql selve sql koden der skal køres 
      */
     public void createSQLStatement(String sql){
         try {
@@ -53,12 +50,11 @@ public class databaseConnection {
         }
     }
     
-    /**
-     * 
-     * Metoden er til at få antallet af kolonner fra database tabellen "Udgifter"
-     * 
-     */
     
+    /**
+     * Metoden er til at få antallet af kolonner fra database tabellen "Udgifter"
+     * @return - antal kolonner
+     */
     public int getCountOfCollumns(){
         
        String sql = "SELECT * FROM Udgifter;";
@@ -80,8 +76,8 @@ public class databaseConnection {
     }
     
     /**
-     * 
      * Metoden er til at få udgifter fra udgiftstabel som resultset
+     * @return - ResultSet for udgifter
      */
     public ResultSet getUdgifter(){
         String sql = "SELECT * FROM Udgifter;";
@@ -98,9 +94,11 @@ public class databaseConnection {
     }
     
     
+
     /**
      * Metoden er til få metadataen fra et resultset
-     * @param rs
+     * @param rs resulsetSet for et Sql statement
+     * @return - ResultSetMetaData
      */
     public ResultSetMetaData getMetaRS(ResultSet rs){
         ResultSetMetaData rsmd = null;
@@ -114,7 +112,11 @@ public class databaseConnection {
     }
     
     
-    
+    /**
+     * Til at finde kolonne navnet i tabelen "Udgifter", ved kolonne nummeret i 
+     * @param i kolonne nummer
+     * @return - kolonne navn
+     */
     public String getCollumnNameForI(int i){
         
         String sql = "SELECT * FROM Udgifter;";
@@ -137,7 +139,11 @@ public class databaseConnection {
         return null;
     }
     
-            
+    /**
+     * Til at finde kolonne værdien i tabelen "Udgifter", ved kolonne nummeret i 
+     * @param i kolonne nummer
+     * @return - kolonne værdi
+     */        
     public float getCollumnValueForI(int i){
         String sql = "SELECT * FROM Udgifter;";
        
@@ -159,31 +165,4 @@ public class databaseConnection {
         return 0;
     }
     
-    
-    /* Deprecated
-    public ExpensesChart getUdgifterListe(ExpensesChart expenseChart){
-        String sql = "SELECT * FROM Udgifter;";
-        ResultSet rs = null;
-        JLabel[] list = new JLabel[getCountOfCollumns()];
-        try {
-            Statement stmt = connect().createStatement();
-            rs = stmt.executeQuery(sql);
-            stmt.close();
-            
-            ResultSetMetaData rsmd = getMetaRS(rs);
-            
-            int i = 0;
-            while(rs.next()){
-                JLabel udgiftTemp = expenseChart.addExpense(rsmd.getColumnName(i), rs.getFloat(i));
-                list[i] = udgiftTemp;
-                i++;
-            }
-            
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }   
-        return expenseChart;
-    }
-    */
 }

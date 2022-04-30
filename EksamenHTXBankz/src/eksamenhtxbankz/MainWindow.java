@@ -98,6 +98,7 @@ public class MainWindow extends JFrame{
     
     /**
      * MainWindow.java's constructor, bruges til at starte connection til db samt kreere alle paneler
+     * @param choosenLocale specifik geografisk, politisk og kulturel region 
      */
     public MainWindow(Locale choosenLocale) {
         bankDB = new databaseConnection();
@@ -713,8 +714,11 @@ public class MainWindow extends JFrame{
         
     }
     
+
     /**
      * Til kreering af horizontal separator med JSeperator
+     * @param color farve til JSeperator
+     * @return JSeperator
      */
     private JSeparator CreateHorizontalSeperator(Color color){
         JSeparator HorizontalSeperator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -726,6 +730,9 @@ public class MainWindow extends JFrame{
     /**
      * Til skift af JPanel
      * bruges til hver skiftning mellem programmets forskellige funktioner
+     * @param currentPanel nuværende JPanel i JFramet
+     * @param newPanel JPanelet der skal skiftes til
+     * @param newTitle ny titel til programmet, ved skiftning af panel
      */
     public void switchPanels(JPanel currentPanel, JPanel newPanel, String newTitle){
         

@@ -10,7 +10,10 @@ import java.util.Locale;
 import javax.swing.JFrame;
 
 
-
+/**
+ * 
+ * Sætter skærmens størrelse, og laver JFramet udfra MainWindow klassen
+ */
 public class Main {
     public static int frameWidth;
     public static int frameHeight;

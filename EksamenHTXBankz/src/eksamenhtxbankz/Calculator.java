@@ -35,7 +35,7 @@ public class Calculator {
     // Calculates your expected salary based on your amount of hours and your hourly rate
     /**
      * Til udregning af indkomst uden skat, udfra timer og timeløn
-     * @return 
+     * @return - indkomst uden skat aftrukket
      */
     public double calcNonTaxedSalary(){
         nonTaxedSalary = hourlyRate * hours;
@@ -44,9 +44,9 @@ public class Calculator {
     
     /**
      * Til udregning af indkomst med skat, udfra timer og timeløn
-     * @return 
+     * @return - indkomst med skat aftrukket
      */
-    public double  calcTaxedSalary() {
+    public double calcTaxedSalary() {
         if (nonTaxedSalary <= taxCap) {
             taxedSalary = nonTaxedSalary * (1 - totalLowerTax);
             return  taxedSalary;
@@ -59,7 +59,7 @@ public class Calculator {
     
     /**
      * Til sætning af skat procent ved tillægning af kommuneskat
-     * @param decimalCommunalTax - kommuneskat 
+     * @param decimalCommunalTax kommuneskat 
      */
     public void setTaxBrackets(double decimalCommunalTax) {
         totalLowerTax = decimalCommunalTax + 0.1216 + 0.08;
