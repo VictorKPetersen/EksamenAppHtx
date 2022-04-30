@@ -60,6 +60,7 @@ public class MainWindow extends JFrame{
     private JLabel totalIncomeLabel;
     private JTextField hoursAmountTxtField;
     private JTextField hourlyRateTxtField;
+    private double salaryTaxedValue;
     private JLabel salaryTaxedLabel;
     private JLabel salaryNonTaxedLabel;
     private JTextField stateHelpTxtField;
@@ -73,6 +74,7 @@ public class MainWindow extends JFrame{
     private ExpensesChart expenseChart; //chart af udgifter
     private JLabel udgiftTemp; //temporary udgift som pulles fra DB
     private JLabel[] udgiftsListe; // liste af udgifts labels
+    private JLabel samletUdgifterTxt;
     private XChartPanel<PieChart> expensePanel; // panel fra expensechart
             
     //Database
@@ -210,6 +212,8 @@ public class MainWindow extends JFrame{
         String collumnName; //temporary collumn navn som pulles fra DB
         float collumnValue; //temporary collumn værdi som pulles fra DB
         
+        float samletUdgifter = 0;
+        
         //tilføj udgifter
         for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
             
@@ -217,14 +221,17 @@ public class MainWindow extends JFrame{
             collumnValue = bankDB.getCollumnValueForI(i);
             
             System.out.println("i: "+bankDB.getCountOfCollumns()+" name: "+collumnName + " value: " + collumnValue);
+            
             if(collumnName != null){
                udgiftTemp = expenseChart.addExpense(collumnName, collumnValue); 
                udgiftsListe[i-1] = udgiftTemp;
+               samletUdgifter += collumnValue;
             } 
             
             
             
         }
+        samletUdgifterTxt = new JLabel("Samlet Udgifter: " + Float.toString(samletUdgifter));
         
         
         
@@ -234,9 +241,12 @@ public class MainWindow extends JFrame{
         udgiftPanel.add(expensePanel);
         
         //tilføj udgifts liste
+        
         for(int i = 0; i <= udgiftsListe.length-1; i++){
             udgiftPanel.add(udgiftsListe[i]);
         }  
+        udgiftPanel.add(samletUdgifterTxt);
+        
     }
     
     private void CreateComponentsIndkomst(){
@@ -302,6 +312,7 @@ public class MainWindow extends JFrame{
                 }
                 salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
                 salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                salaryTaxedValue = salaryCalc.calcTaxedSalary();
                 
             }
 
@@ -355,6 +366,7 @@ public class MainWindow extends JFrame{
                 
                 salaryNonTaxedLabel.setText(String.format(activeLocale, "Løn ekskl. Skat: %,.2f", salaryCalc.calcNonTaxedSalary()));
                 salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                salaryTaxedValue = salaryCalc.calcTaxedSalary();
             }
 
             @Override
@@ -408,6 +420,7 @@ public class MainWindow extends JFrame{
                     Double textFieldValue = Double.parseDouble(communalTaxTxtField.getText().replaceAll(".^\\d", ""));
                     salaryCalc.setTaxBrackets(textFieldValue / 100);
                     salaryTaxedLabel.setText(String.format(activeLocale, "Løn inkl. Skat: %,.2f", salaryCalc.calcTaxedSalary()));
+                    salaryTaxedValue = salaryCalc.calcTaxedSalary();
                 } catch (NumberFormatException TException) {
                     System.out.println("Non numberic characther in string: " + TException);
                 }
@@ -558,7 +571,7 @@ public class MainWindow extends JFrame{
         
         withdrawalPrMonthTxtField = new JTextField("Udtræk Pr Måned (kr.)");
         
-        differenceToGoal = new JLabel("mål - reel: ");
+        differenceToGoal = new JLabel("indkomst - udgift og månedlig opsparing: ");
         
         withdrawalPrMonthTxtField.addFocusListener(new FocusListener() {
             @Override
@@ -670,8 +683,8 @@ public class MainWindow extends JFrame{
             sumOfSliderVals += expenseSliders[i-1].getValue();
             sumOfDBVals += bankDB.getCollumnValueForI(i);
         }
-        System.out.println(sumOfSliderVals + " : " + sumOfDBVals);
-        differenceToGoal.setText("mål - reel: " + ((sumOfDBVals - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));
+        differenceToGoal.setText("indkomst - udgift og månedlig opsparing: " + (((float) salaryTaxedValue - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));        
+        //differenceToGoal.setText("mål - reel: " + ((sumOfDBVals - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));
         
     }
     
