@@ -4,11 +4,16 @@
 */
 package eksamenhtxbankz;
 
+/**
+ * 
+ * Calculator klasse, til udregning af alt indkomst relateret
+ */
 public class Calculator {
     public double hourlyRate;
     public double hours;
     private double nonTaxedSalary;
     private  double taxedSalary;
+    
     
     //Tax for 2022 taken from https://www.legaldesk.dk/artikler/topskat
     private double taxCap = 50045;
@@ -18,6 +23,9 @@ public class Calculator {
     //Upper tax bracket ceiling taken from https://www.legaldesk.dk/artikler/topskat
     private double totalUpperTax;
     
+    /**
+     * Calculator.java's constructor, sætter instansens forskellige variabler
+     */
     public Calculator() {
         this.taxCap = 544800;
         this.totalLowerTax = 0.1216 + 0.08;
@@ -25,11 +33,19 @@ public class Calculator {
     }
     
     // Calculates your expected salary based on your amount of hours and your hourly rate
+    /**
+     * Til udregning af indkomst uden skat, udfra timer og timeløn
+     * @return 
+     */
     public double calcNonTaxedSalary(){
         nonTaxedSalary = hourlyRate * hours;
         return nonTaxedSalary;
     }
     
+    /**
+     * Til udregning af indkomst med skat, udfra timer og timeløn
+     * @return 
+     */
     public double  calcTaxedSalary() {
         if (nonTaxedSalary <= taxCap) {
             taxedSalary = nonTaxedSalary * (1 - totalLowerTax);
@@ -41,6 +57,10 @@ public class Calculator {
         }
     }
     
+    /**
+     * Til sætning af skat procent ved tillægning af kommuneskat
+     * @param decimalCommunalTax - kommuneskat 
+     */
     public void setTaxBrackets(double decimalCommunalTax) {
         totalLowerTax = decimalCommunalTax + 0.1216 + 0.08;
         if (totalLowerTax + 0.15 <= 0.5207) {

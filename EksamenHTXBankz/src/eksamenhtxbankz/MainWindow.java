@@ -37,7 +37,10 @@ import org.knowm.xchart.XChartPanel;
 
 
 
-
+/**
+ * MainWindow til alt GUI relateret og startning af andre processer
+ * @author Victor B. Pedersen og Victor K. Petersen
+ */
 public class MainWindow extends JFrame{
     //Panel Class Variables
     private JPanel homePanel;
@@ -93,7 +96,9 @@ public class MainWindow extends JFrame{
     private JTextField[] expenseCollumnValues;
     private JLabel differenceToGoal;
     
-    
+    /**
+     * MainWindow.java's constructor, bruges til at starte connection til db samt kreere alle paneler
+     */
     public MainWindow(Locale choosenLocale) {
         bankDB = new databaseConnection();
         
@@ -106,6 +111,9 @@ public class MainWindow extends JFrame{
         activeLocale = choosenLocale;
     }
     
+    /**
+     * Til kreering af startspanelet og dets komponenter
+     */
     private void CreateComponentsHome(){
         this.setTitle("Din Økonomiske Hjælper");
         homePanel = new JPanel();
@@ -158,7 +166,9 @@ public class MainWindow extends JFrame{
         
         
     }
-    
+    /**
+     * Til kreering af kontopanelet og dets komponenter
+     */
     private void CreateComponentsKonto(){
         kontoPanel = new JPanel();
         
@@ -175,7 +185,9 @@ public class MainWindow extends JFrame{
         kontoPanel.add(backHomeBtn);
         
     }
-    
+    /**
+     * Til kreering af udgiftspanelet og dets komponenter
+     */
     private void CreateComponentsUdgift(){
         udgiftPanel = new JPanel();
         udgiftPanel.setLayout(new BoxLayout(udgiftPanel, BoxLayout.Y_AXIS)); 
@@ -248,7 +260,9 @@ public class MainWindow extends JFrame{
         udgiftPanel.add(samletUdgifterTxt);
         
     }
-    
+    /**
+     * Til kreering af indkomstspanelet og dets komponenter
+     */
     private void CreateComponentsIndkomst(){
         Calculator salaryCalc = new Calculator();
         
@@ -553,6 +567,9 @@ public class MainWindow extends JFrame{
         indkomstPanel.add(Box.createRigidArea(new Dimension(0, Main.frameHeight / 97)));
     }
     
+    /**
+     * Til kreering af opsparingspanelet og dets komponenter
+     */
     private void CreateComponentsOpspar(){
         opsparPanel = new JPanel();
         opsparPanel.setLayout(new BoxLayout(opsparPanel, BoxLayout.Y_AXIS));
@@ -658,6 +675,9 @@ public class MainWindow extends JFrame{
         
     }
     
+    /**
+     * Til opdatering af opsparings slider labels værdier for udgifter
+     */
     public void updateSliderLabelValues(){
         for(int i = 0; i <= expenseSliders.length-1; i++){
             expenseSliders[i].setSnapToTicks(true);
@@ -667,6 +687,9 @@ public class MainWindow extends JFrame{
         }
     }
     
+    /**
+     * Til opdatering af opsparings slider værdier for udgifter
+     */
     public void updateSliderValues(){
         for(int i = 0; i <= expenseCollumnValues.length-1; i++){
             expenseSliders[i].setSnapToTicks(false);
@@ -675,25 +698,35 @@ public class MainWindow extends JFrame{
         }
     }
     
-    //NOTE: skal senere bruge indkomst værdi istedet for udgifter fra db
+    /**
+     * Til opdatering af opsparings målet
+     */
     public void updateGoal(){
         float sumOfSliderVals = 0;
-        float sumOfDBVals = 0;
+
         for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
             sumOfSliderVals += expenseSliders[i-1].getValue();
-            sumOfDBVals += bankDB.getCollumnValueForI(i);
+
         }
         differenceToGoal.setText("indkomst - udgift og månedlig opsparing: " + (((float) salaryTaxedValue - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));        
         //differenceToGoal.setText("mål - reel: " + ((sumOfDBVals - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));
         
     }
     
+    /**
+     * Til kreering af horizontal separator med JSeperator
+     */
     private JSeparator CreateHorizontalSeperator(Color color){
         JSeparator HorizontalSeperator = new JSeparator(SwingConstants.HORIZONTAL);
         HorizontalSeperator.setForeground(color); HorizontalSeperator.setBackground(color);
         return HorizontalSeperator;
     } 
     
+    
+    /**
+     * Til skift af JPanel
+     * bruges til hver skiftning mellem programmets forskellige funktioner
+     */
     public void switchPanels(JPanel currentPanel, JPanel newPanel, String newTitle){
         
         remove(currentPanel);
