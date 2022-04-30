@@ -743,6 +743,7 @@ public class MainWindow extends JFrame{
             sumOfSliderVals += expenseSliders[i-1].getValue();
 
         }
+        incomeTxt.setText("forventet indkomst: " +(float) salaryTaxedValue );
         differenceToGoal.setText("indkomst - udgift og månedlig opsparing: " + (((float) salaryTaxedValue - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));        
         //differenceToGoal.setText("mål - reel: " + ((sumOfDBVals - Float.parseFloat(withdrawalPrMonthTxtField.getText())) - sumOfSliderVals));
         
