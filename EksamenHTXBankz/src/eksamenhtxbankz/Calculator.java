@@ -16,10 +16,11 @@ public class Calculator {
     private double nonTaxedSalary;
     private double taxedSalary;
 
-    
+    //Tax for 2022 https://skat.dk/skat.aspx?oid=1719985
+    private double bottomTaxCap;
     
     //Tax for 2022 taken from https://www.legaldesk.dk/artikler/topskat
-    private double taxCap;
+    private double topTaxCap;
     
     private double totalLowerTax;
     
@@ -30,7 +31,8 @@ public class Calculator {
      * Calculator.java's constructor, sætter instansens forskellige variabler
      */
     public Calculator() {
-        this.taxCap = 50045;
+        this.bottomTaxCap = 46600;
+        this.topTaxCap = 50045;
         this.suSalary = 0.0;
         this.otherIncome = 0.0;
         this.totalLowerTax = 0.1216 + 0.08;
@@ -52,12 +54,17 @@ public class Calculator {
      * @return - indkomst med skat aftrukket
      */
     public double calcTaxedSalary() {
-        if (nonTaxedSalary <= taxCap) {
-            taxedSalary = nonTaxedSalary * (1 - totalLowerTax);
+        if(nonTaxedSalary <= bottomTaxCap){
+            taxedSalary = nonTaxedSalary * (1 - 0.08);
+            return  taxedSalary;
+        }
+        if (nonTaxedSalary <= topTaxCap && nonTaxedSalary >= bottomTaxCap) {
+            double moneyOverBottomTax = nonTaxedSalary - bottomTaxCap;
+            taxedSalary = moneyOverBottomTax * (1 - totalLowerTax) + bottomTaxCap * (1-0.08);
             return  taxedSalary;
         } else {
-            double moneyOverUpperTax = nonTaxedSalary - taxCap;
-            taxedSalary = moneyOverUpperTax * (1 - totalUpperTax) + taxCap * (1 - totalLowerTax);
+            double moneyOverUpperTax = nonTaxedSalary - topTaxCap;
+            taxedSalary = moneyOverUpperTax * (1 - totalUpperTax) + topTaxCap * (1 - totalLowerTax);
             return taxedSalary;
         }
     }
