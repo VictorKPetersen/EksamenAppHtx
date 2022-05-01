@@ -16,6 +16,7 @@ public class Calculator {
     private double nonTaxedSalary;
     private double taxedSalary;
 
+    public double communalTax;
     //Tax for 2022 https://skat.dk/skat.aspx?oid=1719985
     private double bottomTaxCap;
     
@@ -55,12 +56,12 @@ public class Calculator {
      */
     public double calcTaxedSalary() {
         if(nonTaxedSalary <= bottomTaxCap){
-            taxedSalary = nonTaxedSalary * (1 - 0.08);
+            taxedSalary = nonTaxedSalary * (1 - 0.08 - communalTax);
             return  taxedSalary;
         }
         if (nonTaxedSalary <= topTaxCap && nonTaxedSalary >= bottomTaxCap) {
             double moneyOverBottomTax = nonTaxedSalary - bottomTaxCap;
-            taxedSalary = moneyOverBottomTax * (1 - totalLowerTax) + bottomTaxCap * (1-0.08);
+            taxedSalary = moneyOverBottomTax * (1 - totalLowerTax) + bottomTaxCap * (1 - 0.08 - communalTax);
             return  taxedSalary;
         } else {
             double moneyOverUpperTax = nonTaxedSalary - topTaxCap;
@@ -74,6 +75,7 @@ public class Calculator {
      * @param decimalCommunalTax kommuneskat 
      */
     public void setTaxBrackets(double decimalCommunalTax) {
+        this.communalTax = decimalCommunalTax;
         totalLowerTax = decimalCommunalTax + 0.1216 + 0.08;
         if (totalLowerTax >= 0.5207) {
             totalLowerTax = 0.5207;
