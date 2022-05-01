@@ -664,8 +664,8 @@ public class MainWindow extends JFrame{
                expenseCollumnLabel = new JLabel(collumnName); 
                expenseCollumnLabels[i-1] = expenseCollumnLabel; 
                
-               expenseTempSlider = new JSlider(0,20000,(int)collumnValue); expenseTempSlider.setAlignmentX(LEFT_ALIGNMENT);
-               expenseTempSlider.setMajorTickSpacing(5000);expenseTempSlider.setMinorTickSpacing(1000); 
+               expenseTempSlider = new JSlider(0,5000,(int)collumnValue); expenseTempSlider.setAlignmentX(LEFT_ALIGNMENT);
+               expenseTempSlider.setMajorTickSpacing(1000);expenseTempSlider.setMinorTickSpacing(100); 
                expenseTempSlider.setPaintTicks(true); expenseTempSlider.setPaintLabels(true); //expenseTempSlider.setSnapToTicks(true);
                
                expenseSliders[i-1] = expenseTempSlider;
