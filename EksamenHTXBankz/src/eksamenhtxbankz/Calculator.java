@@ -56,7 +56,7 @@ public class Calculator {
      */
     public double calcTaxedSalary() {
         if(nonTaxedSalary <= bottomTaxCap){
-            taxedSalary = nonTaxedSalary * (1 - 0.08 - communalTax);
+            taxedSalary = nonTaxedSalary * (1 - 0.08);
             return  taxedSalary;
         }
         if (nonTaxedSalary <= topTaxCap && nonTaxedSalary >= bottomTaxCap) {
