@@ -326,7 +326,7 @@ public class MainWindow extends JFrame{
                     System.out.println("Non numberic characther in string: " + TException);
                 }
                 updateSalaryFields(salaryCalc);
-                salaryTaxedValue = salaryCalc.calcTaxedSalary();
+                salaryTaxedValue = salaryCalc.getExpectedIncome();
             }
 
             @Override
@@ -378,7 +378,7 @@ public class MainWindow extends JFrame{
                 }
                 
                 updateSalaryFields(salaryCalc);
-                salaryTaxedValue = salaryCalc.calcTaxedSalary();
+                salaryTaxedValue = salaryCalc.getExpectedIncome();
             }
 
             @Override
