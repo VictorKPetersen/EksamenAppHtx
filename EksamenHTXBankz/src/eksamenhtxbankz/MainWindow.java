@@ -713,7 +713,7 @@ public class MainWindow extends JFrame{
     /**
      * Til opdatering af opsparings slider labels værdier for udgifter
      */
-    public void updateSliderLabelValues(){
+    private void updateSliderLabelValues(){
         for(int i = 0; i <= expenseSliders.length-1; i++){
             expenseSliders[i].setSnapToTicks(true);
             expenseCollumnValues[i].setText(Integer.toString(expenseSliders[i].getValue()));
@@ -725,7 +725,7 @@ public class MainWindow extends JFrame{
     /**
      * Til opdatering af opsparings slider værdier for udgifter
      */
-    public void updateSliderValues(){
+    private void updateSliderValues(){
         for(int i = 0; i <= expenseCollumnValues.length-1; i++){
             expenseSliders[i].setSnapToTicks(false);
             expenseSliders[i].setValue(parseInt(expenseCollumnValues[i].getText()));
@@ -736,7 +736,7 @@ public class MainWindow extends JFrame{
     /**
      * Til opdatering af opsparings målet
      */
-    public void updateGoal(){
+    private void updateGoal(){
         float sumOfSliderVals = 0;
 
         for(int i = 1; i <= bankDB.getCountOfCollumns(); i++){
@@ -779,7 +779,7 @@ public class MainWindow extends JFrame{
      * @param newPanel JPanelet der skal skiftes til
      * @param newTitle ny titel til programmet, ved skiftning af panel
      */
-    public void switchPanels(JPanel currentPanel, JPanel newPanel, String newTitle){
+    private void switchPanels(JPanel currentPanel, JPanel newPanel, String newTitle){
         
         remove(currentPanel);
         add(newPanel);
