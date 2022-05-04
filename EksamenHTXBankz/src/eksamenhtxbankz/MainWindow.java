@@ -100,7 +100,7 @@ public class MainWindow extends JFrame{
      * MainWindow.java's constructor, bruges til at starte connection til db samt kreere alle paneler
      * @param choosenLocale specifik geografisk, politisk og kulturel region 
      */
-    public MainWindow(Locale choosenLocale) {
+    public MainWindow(Locale activeLocale) {
         bankDB = new databaseConnection();
         
         CreateComponentsHome();
@@ -109,7 +109,7 @@ public class MainWindow extends JFrame{
         CreateComponentsIndkomst();
         CreateComponentsOpspar();
            
-        activeLocale = choosenLocale;
+        this.activeLocale = activeLocale;
     }
     
     /**
